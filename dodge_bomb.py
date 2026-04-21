@@ -43,22 +43,39 @@ def gameover(screen: pg.Surface) -> None:
     go_img2_rct.center = WIDTH//2+200, HEIGHT//2
     go_img.blit(go_img2,go_img2_rct)
     go_img3 = pg.image.load("fig/8.png")
-    go_img3_rct = go_img2.get_rect()
+    go_img3_rct = go_img3.get_rect()
     go_img3_rct.center = WIDTH//2-200, HEIGHT//2
     go_img.blit(go_img3,go_img3_rct)
     screen.blit(go_img,[0,0])
     pg.display.update()
 
 
+def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
+    bb_imgs = []
+    bb_accs = []
+    for r in range(1,11):
+        bb_img = pg.Surface((20*r, 20*r))
+        bb_img.set_colorkey((0,0,0))
+        pg.draw.circle(bb_img, (255, 0, 0), (10*r, 10*r), 10*r)
+        bb_imgs.append(bb_img)
+        bb_accs.append(r)
+    return bb_imgs, bb_accs
+        
+
+
 def main():
+    bb_imgs, bb_accs = init_bb_imgs()
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("fig/pg_bg.jpg")    
     kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 0.9)
     kk_rct = kk_img.get_rect()
     kk_rct.center = 300, 200
-    bb_img = pg.Surface((20,20)) 
-    pg.draw.circle(bb_img, (255,0,0),(10,10),10)
+    bb_img = bb_imgs[0]
+    bb_rct = bb_img.get_rect()
+    bb_rct.center = random.randint(0, WIDTH), random.randint(0, HEIGHT)
+    #bb_img = pg.Surface((20,20)) 
+    #pg.draw.circle(bb_img, (255,0,0),(10,10),10)
     bb_img.set_colorkey((0,0,0))
     bb_rct = bb_img.get_rect()
     bb_rct.centerx = random.randint(0, WIDTH)
@@ -98,7 +115,12 @@ def main():
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1])
  
         screen.blit(kk_img, kk_rct)
-        bb_rct.move_ip(vx, vy)
+        #bb_rct.move_ip(vx, vy)
+        idx = min(tmr // 500, 9)
+        bb_img = bb_imgs[idx]
+        av = bb_accs[idx]
+        bb_rct = bb_img.get_rect(center=bb_rct.center)
+        bb_rct.move_ip(vx * av, vy * av)
         yoko, tate = check_bound(bb_rct)
         if not yoko:  # 横方向の判定
             vx *= -1
