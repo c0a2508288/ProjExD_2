@@ -29,6 +29,11 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
 
 
 def gameover(screen: pg.Surface) -> None:
+    """
+    こうかとんに爆弾が着弾した際に、ゲームオーバー画面を表示する関数。
+    引数：screen(pg.Surface)
+    戻り値：なし
+    """
     go_img = pg.Surface((WIDTH, HEIGHT))
     pg.draw.rect(go_img,(0,0,0), (0,0,WIDTH, HEIGHT))
     go_img.set_alpha(150)
