@@ -48,6 +48,7 @@ def gameover(screen: pg.Surface) -> None:
     go_img.blit(go_img3,go_img3_rct)
     screen.blit(go_img,[0,0])
     pg.display.update()
+    time.sleep(5)
 
 
 def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
@@ -60,7 +61,6 @@ def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
         bb_imgs.append(bb_img)
         bb_accs.append(r)
     return bb_imgs, bb_accs
-        
 
 
 def main():
@@ -90,7 +90,6 @@ def main():
         if kk_rct.colliderect(bb_rct):
             print("ゲームオーバー")
             gameover(screen)
-            time.sleep(5)
             return
         screen.blit(bg_img, [0, 0]) 
 
